@@ -1,21 +1,49 @@
-[gd_scene load_steps=4 format=3 uid="uid://dwdga860bidlx"]
+[gd_scene load_steps=8 format=3 uid="uid://dwdga860bidlx"]
 
 [ext_resource type="Script" uid="uid://br1qanrptw440" path="res://character_body_2d.gd" id="1_ij6vw"]
 [ext_resource type="PackedScene" uid="uid://bm8s1oaoxngwq" path="res://assets/runner/runner_visual_red.tscn" id="3_5pwe8"]
+[ext_resource type="Texture2D" uid="uid://dbcmxo51msi8m" path="res://assets/runner/shadow.png" id="3_hfbw2"]
+[ext_resource type="Shader" uid="uid://bwhexggpo0snf" path="res://assets/character_contour.gdshader" id="4_hfbw2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_44cfe"]
-radius = 38.078865
+radius = 43.56604
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_44hxy"]
+shader = ExtResource("4_hfbw2")
+shader_parameter/viewport_scale = Vector2(1, 1)
+shader_parameter/line_color = Color(0, 0, 0, 1)
+shader_parameter/line_thickness = 4.0
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_vk5uk"]
+viewport_path = NodePath("SubViewport")
 
 [node name="Runner" type="CharacterBody2D"]
 position = Vector2(64, 34)
 motion_mode = 1
 script = ExtResource("1_ij6vw")
 
-[node name="RunnerVisualRed" parent="." instance=ExtResource("3_5pwe8")]
-unique_name_in_owner = true
+[node name="Shadow" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 0.15686275)
+texture = ExtResource("3_hfbw2")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -18)
 shape = SubResource("CircleShape2D_44cfe")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(124, 150)
+
+[node name="RunnerVisualRed" parent="SubViewport" instance=ExtResource("3_5pwe8")]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(70, 140)
+scale = Vector2(0.4, 0.4)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_44hxy")
+position = Vector2(-8, -61)
+scale = Vector2(0.823, 1)
+texture = SubResource("ViewportTexture_vk5uk")
